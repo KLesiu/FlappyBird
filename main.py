@@ -20,6 +20,14 @@ birdX = 200
 birdY = 180
 birdY_change = 0.2
 
+# Score
+score_value = 0
+font = pygame.font.Font('freesansbold.ttf', 32)
+textX = 10
+textY = 10
+
+# Game over font
+over_font = pygame.font.Font('freesansbold.ttf', 64)
 
 
 #Crete rope
@@ -48,6 +56,10 @@ def bird(x,y):
 
 
 
+def show_score(x,y):
+    score = font.render("Score : " + str(score_value), True, (255,255,255))
+    screen.blit(score, (x,y))
+
 def rope(x,y, i):
     screen.blit(ropeImg[i], (x,y))
 
@@ -63,6 +75,18 @@ def collision(birdY,ropeY,i,ropeX):
             return True
         else:
             return False
+
+def end_game():
+    global ropeX_change
+    for i in range(len(ropeImg)):
+        ropeX[i] = 100000000
+        ropeX_change = 0
+
+    over_text = over_font.render("GAME OVER", True, (255, 255, 255))
+    screen.blit(over_text, (450, 200))
+
+
+
 
 
 
@@ -104,9 +128,12 @@ while running:
 
     for i in range(len(ropeImg)):
         ropeX[i] += -0.5
+        if ropeX[i] < birdX:
+            score_value = i+1
         if collision(birdY,ropeY[i],i,ropeX[i]) == True:
-            print('Kolizja')
+            end_game()
+            break
         rope(ropeX[i], ropeY[i],i)
 
-
+    show_score(textX,textY)
     pygame.display.update()
