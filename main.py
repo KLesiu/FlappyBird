@@ -18,7 +18,7 @@ background = pygame.image.load('img_1.png')
 birdImg = pygame.image.load('flappy.png')
 birdX = 200
 birdY = 180
-birdY_change = 0.2
+birdY_change = 0.3
 
 # Score
 score_value = 0
@@ -26,20 +26,20 @@ font = pygame.font.Font('freesansbold.ttf', 32)
 textX = 10
 textY = 10
 
-# Game over font
-over_font = pygame.font.Font('freesansbold.ttf', 64)
+
 
 
 #Crete rope
 ropeImg = []
 ropeX = []
 ropeX_first = 850
-ropeX_change = 500
+ropeX_change = 300
 ropeY = []
 
 for i in range(1000):
     ropeImg.append(pygame.image.load('rope.png'))
     ropeX.append(ropeX_first)
+
     ropeX_first += ropeX_change
     if i % 2 == 0:
         ropeY.append(random.randint(-200,-100))
@@ -81,9 +81,8 @@ def end_game():
     for i in range(len(ropeImg)):
         ropeX[i] = 100000000
         ropeX_change = 0
-
-    over_text = over_font.render("GAME OVER", True, (255, 255, 255))
-    screen.blit(over_text, (450, 200))
+    global score_value
+    score_value = "Game Over"
 
 
 
@@ -105,12 +104,12 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                birdY_change = -0.4
+                birdY_change = -1
 
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
-                birdY_change = 0.2
+                birdY_change = 0.5
 
 
 
@@ -120,7 +119,8 @@ while running:
     if birdY <= 0:
         birdY = 0
     elif birdY >= 480:
-        birdY = 480
+        birdY = 700
+        end_game()
 
 
 
